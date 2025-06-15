@@ -1,0 +1,37 @@
+{
+  "file": "D:/bauplatz/ki-test/000-test-python-hello-world.py",
+  "timestamp": "2025-06-15T14:00:39.725052",
+  "score": -64,
+  "diff": [
+    "--- original\n",
+    "+++ processed\n",
+    "@@ -1,9 +1,17 @@\n",
+    "-import tkinter as tk",
+    "+# [Funktionszweck]",
+    "+def create_tkinter_window():",
+    "+    # Parameter: None",
+    "+    # Rückgabe: Keine",
+    " ",
+    "-root = tk.Tk()",
+    "-root.title(\"Mein erstes Tkinter-Fenster\")",
+    "+    # Erstelle das Hauptfenster des Tkinter-Anwendungsmoduls.",
+    "+    root = tk.Tk()",
+    "+    root.title(\"Mein erstes Tkinter-Fenster\")",
+    " ",
+    "-label = tk.Label(root, text=\"Hello World\", font=(\"Arial\", 14))",
+    "-label.pack(pady=20)",
+    "+    # Erstelle ein Label-Objekt, das den Text \"Hello World\" und die Schriftgröße 14 im Fenster anzeigt.",
+    "+    label = tk.Label(root, text=\"Hallo Welt\", font=(\"Arial\", 14))",
+    "+    label.pack(pady=20)",
+    " ",
+    "-root.mainloop()",
+    "+    # Starte den Tkinter-Eventloop, der das Fenster zeigt und bewältigt Eingaben des Benutzers.",
+    "+    root.mainloop()",
+    "+",
+    "+create_tkinter_window()"
+  ],
+  "prompt": {
+    "positive": "[POSITIV]\n1. Füge VOR JEDER 'def'-Funktion genau 3 Kommentarzeilen hinzu:\n   - Zeile 1: '# [Funktionszweck]'\n   - Zeile 2: '# Parameter: [Name1] - [Beschreibung]'\n   - Zeile 3: '# Rückgabe: [Beschreibung]'\n2. Deutsche Beschreibungen verwenden",
+    "negative": "[NEGATIV]\n1. NIEMALS existierenden Code ändern\n2. KEINE Docstrings (''') verwenden\n3. KEINE Leerzeichen/Tabs ändern"
+  }
+}

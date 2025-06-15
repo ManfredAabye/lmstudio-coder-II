@@ -26,15 +26,18 @@ class LMSAPIHandler:
         })
 
     def optimize_prompt(self, prompt):
-        """Optimize prompt via API"""
+        """Optimize prompt with proper response parsing"""
         try:
+            if not isinstance(prompt, dict):
+                raise ValueError("Prompt must be a dictionary")
+            
             response = requests.post(
                 urljoin(self.base_url, "chat/completions"),
                 json={
                     "messages": [
                         {
-                            "role": "system", 
-                            "content": "Optimize this coding prompt while maintaining strict constraints:"
+                            "role": "system",
+                            "content": "Optimize this coding prompt while maintaining all constraints:"
                         },
                         {
                             "role": "user",
@@ -47,9 +50,27 @@ class LMSAPIHandler:
                 timeout=30
             )
             response.raise_for_status()
-            return response.json()['choices'][0]['message']['content']
+            
+            result = response.json()
+            content = result['choices'][0]['message']['content']
+            
+            # Parse the response into proper format
+            if isinstance(content, str):
+                try:
+                    return json.loads(content)  # If API returns JSON string
+                except json.JSONDecodeError:
+                    # If API returns text, create proper structure
+                    return {
+                        'positive': content,
+                        'negative': prompt.get('negative', '')
+                    }
+            elif isinstance(content, dict):
+                return content
+            else:
+                raise ValueError("Unexpected API response format")
+                
         except Exception as e:
-            logging.error(f"Prompt optimization failed: {str(e)}")
+            logging.error(f"Prompt optimization API error: {str(e)}")
             raise
 
     def _process_requests(self):

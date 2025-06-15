@@ -2,8 +2,8 @@
 ## Dateiname: lmevolution.py (Selbstverbesserung)
 # LMS Evolution Modul
 
-import difflib
 import json
+import difflib
 import logging
 from pathlib import Path
 from datetime import datetime
@@ -21,22 +21,29 @@ class LMEvolution:
         return re.sub(r'[^\w\-.]', '_', timestamp)
 
     def analyze_result(self, result):
-        """Analyze and save processing results"""
+        """Analyze processing results with complete argument handling"""
         try:
+            if not all(key in result for key in ['file_path', 'original', 'processed']):
+                raise ValueError("Invalid result format")
+            
             diff = self._calculate_diff(result['original'], result['processed'])
             score = self._score_changes(diff)
+            
+            # Pass all required arguments including the current prompt
             self._save_analysis(
                 file_path=result['file_path'],
                 diff=diff,
                 score=score,
-                prompt=self.plugin.current_prompt
+                prompt=self.plugin.current_prompt  # Added this argument
             )
             
-            if score < 50:  # Optimization threshold
+            if score < 50 and getattr(self.plugin.gui, 'auto_optimize', False):
                 self._optimize_prompt()
+                
         except Exception as e:
-            logging.error(f"Analysis failed: {str(e)}")
-            self.plugin.gui.show_error(f"Analysis error: {str(e)}")
+            error_msg = f"Analysis failed: {str(e)}"
+            logging.error(error_msg)
+            self.plugin.gui.show_error(error_msg)
 
     def _calculate_diff(self, original, processed):
         """Generate unified diff"""
@@ -54,10 +61,10 @@ class LMEvolution:
         return added - (modified * 10)
 
     def _save_analysis(self, file_path, diff, score, prompt):
-        """Save analysis data with safe filename"""
+        """Save analysis data with all required parameters"""
         try:
             timestamp = datetime.now().isoformat()
-            safe_timestamp = self._get_safe_filename(timestamp)
+            safe_timestamp = re.sub(r'[^\w\-.]', '_', timestamp)
             filename = f"analysis_{safe_timestamp}.json"
             
             data = {
@@ -65,7 +72,7 @@ class LMEvolution:
                 "timestamp": timestamp,
                 "score": score,
                 "diff": diff,
-                "prompt": prompt
+                "prompt": prompt  # Now properly included
             }
             
             with open(self.evolution_dir / filename, 'w', encoding='utf-8') as f:
@@ -77,15 +84,46 @@ class LMEvolution:
             raise
 
     def _optimize_prompt(self):
-        """Optimize prompt using AI"""
+        """Optimize prompt using AI with proper response handling"""
         try:
-            optimized = self.plugin.api_handler.optimize_prompt(self.plugin.current_prompt)
-            name = f"optimized_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            if not self.plugin.current_prompt:
+                raise ValueError("No active prompt to optimize")
+            
+            # Get current prompt data safely
+            current_prompt = {
+                'positive': self.plugin.current_prompt.get('positive', ''),
+                'negative': self.plugin.current_prompt.get('negative', '')
+            }
+            
+            # Call API for optimization
+            optimized = self.plugin.api_handler.optimize_prompt(current_prompt)
+            
+            # Validate and parse API response
+            if not isinstance(optimized, dict):
+                raise ValueError("Invalid API response format")
+            
+            required_keys = {'positive', 'negative'}
+            if not all(key in optimized for key in required_keys):
+                raise ValueError("Optimized prompt missing required fields")
+            
+            # Save new prompt
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            name = f"optimized_{timestamp}"
+            
             self.plugin.prompt_manager.save_prompt(
                 name=name,
                 positive=optimized['positive'],
                 negative=optimized['negative']
             )
+            
             logging.info(f"Prompt optimized and saved as {name}")
+            self.plugin.gui.update_status(f"New prompt saved: {name}")
+            
+        except ValueError as e:
+            error_msg = f"Prompt validation error: {str(e)}"
+            logging.error(error_msg)
+            self.plugin.gui.show_error(error_msg)
         except Exception as e:
-            logging.error(f"Prompt optimization failed: {str(e)}")
+            error_msg = f"Optimization failed: {str(e)}"
+            logging.error(error_msg)
+            self.plugin.gui.show_error(error_msg)

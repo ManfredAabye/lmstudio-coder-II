@@ -23,6 +23,7 @@ class LMSGUI:
         self.root.title("LMStudio AI Coder")
         #self.root.geometry("615x500")
         self.root.geometry("")  # Keine feste Größe setzen
+        self.root.iconbitmap("icon.ico")  # Icon setzen (Datei muss existieren)
         self.style = ttk.Style()
         self.style.configure('TNotebook.Tab', padding=[20, 5])
 

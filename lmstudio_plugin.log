@@ -1,0 +1,16 @@
+2025-06-15 14:02:06,284 - INFO - Application initialized
+2025-06-15 14:02:06,284 - INFO - File handler initialized
+2025-06-15 14:02:06,285 - INFO - Git handler initialized
+2025-06-15 14:02:06,285 - INFO - Prompt manager initialized
+2025-06-15 14:02:06,285 - INFO - API handler initialized
+2025-06-15 14:02:06,285 - INFO - Evolution module initialized
+2025-06-15 14:02:06,345 - INFO - GUI initialized
+2025-06-15 14:02:06,345 - INFO - Background services started
+2025-06-15 14:02:14,538 - INFO - Loaded prompt: example
+2025-06-15 14:02:24,938 - INFO - Saved analysis: analysis_2025-06-15T14_02_24.937638.json
+2025-06-15 14:02:36,111 - INFO - Prompt optimized and saved as optimized_20250615_140236
+2025-06-15 14:02:36,112 - INFO - New prompt saved: optimized_20250615_140236
+2025-06-15 14:03:24,937 - INFO - File handler stopped
+2025-06-15 14:03:24,937 - INFO - API handler stopped
+2025-06-15 14:03:24,937 - INFO - Git handler stopped
+2025-06-15 14:03:24,937 - INFO - Application stopped
