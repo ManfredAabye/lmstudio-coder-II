@@ -1,0 +1,11 @@
+project/
+├── prompts/               # Automatisch erstellt für JSON-Prompts
+├── evolution_data/        # Automatisch erstellt für Evolutionsdaten
+├── lmstudioplug.py        # Hauptprogramm
+├── lmevolution.py         # Selbstverbesserung
+├── lmsgui.py             # Tkinter UI
+├── lmsfile.py            # Dateiverarbeitung
+├── lmsapi.py             # API Kommunikation
+├── lmsprompt.py          # Prompt Management
+├── lmsgit.py             # GitHub Integration
+└── lmstudio_plugin.log   # Automatisch generiertes Log

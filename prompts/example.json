@@ -1,0 +1,7 @@
+{
+    "name": "python_docs",
+    "language": "Python",
+    "positive": "[POSITIV]\n1. Füge VOR JEDER 'def'-Funktion genau 3 Kommentarzeilen hinzu:\n   - Zeile 1: '# [Funktionszweck]'\n   - Zeile 2: '# Parameter: [Name1] - [Beschreibung]'\n   - Zeile 3: '# Rückgabe: [Beschreibung]'\n2. Deutsche Beschreibungen verwenden",
+    "negative": "[NEGATIV]\n1. NIEMALS existierenden Code ändern\n2. KEINE Docstrings (''') verwenden\n3. KEINE Leerzeichen/Tabs ändern",
+    "created": "2023-11-15T12:00:00"
+}
