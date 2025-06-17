@@ -22,7 +22,7 @@ jobs:
 
       - name: Update Python Packages
         run: |
-          pip list --outdated --format=freeze | cut -d= -f1 | xargs pip install --upgrade
+          pip list --outdated --format=json | jq -r '.[] | .name' | xargs pip install --upgrade
 
       - name: Run tests
         run: pytest || echo "Tests failed, but workflow continues."
